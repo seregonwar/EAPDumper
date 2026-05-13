@@ -1,0 +1,6 @@
+.DS_Store
+build/
+*.bin
+*.o
+/ps4-payload-sdk
+*.elf
