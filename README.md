@@ -1,4 +1,6 @@
 # HDD-EAPDumper
+[![Github All Releases](https://img.shields.io/github/downloads/seregonwar/EAPDumper/total.svg)]()
+[![Repository views](https://hits.sh/github.com/seregonwar/EAPDumper.svg?label=views)](https://hits.sh/github.com/seregonwar/EAPDumper/)
 
 PS4 payload that backs up the HDD EAP key from kernel memory.
 
