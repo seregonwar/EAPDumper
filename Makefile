@@ -1,22 +1,38 @@
-# =============================================================================
-# HDD-EAPDumper — PS4 payload built with ps4-payload-sdk
-# =============================================================================
+# Copyright (C) 2026
 #
-# Build requirements:
-#   - ps4-payload-sdk checked out in ./ps4-payload-sdk, or
-#   - PS4_PAYLOAD_SDK pointing to an installed copy.
-#   - llvm-config available via PATH or the LLVM_CONFIG variable.
+# HDD-EAPDumper - Makefile
 #
-# Usage:
-#   make        — build the GoldHEN payload ELF
-#   make raw    — optionally export a raw binary image
-#   make clean  — remove build artefacts
+# Compile for PS4 (default):
+#   make
+#   make ps4
 #
-# Output:
-#   HDD-EAPDumper.elf
-# =============================================================================
+# Build extra artefacts:
+#   make raw
+#
+# Test on console:
+#   export PS4_HOST=<console-ip>
+#   export PS4_PORT=9020
+#   make test-ps4
+#
+# This file is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; see the file COPYING. If not see
+# <http://www.gnu.org/licenses/>.
 
-PS4_PAYLOAD_SDK ?= $(CURDIR)/ps4-payload-sdk
+# Base directory
+MAKEFILE_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+
+# ---------- SDK Paths ----------
+PS4_PAYLOAD_SDK ?= $(MAKEFILE_DIR)ps4-payload-sdk
 LLVM_CONFIG ?= $(shell command -v llvm-config 2>/dev/null)
 
 ifeq ($(strip $(LLVM_CONFIG)),)
@@ -27,24 +43,44 @@ export LLVM_CONFIG
 
 include $(PS4_PAYLOAD_SDK)/toolchain/orbis.mk
 
-TARGET := $(notdir $(CURDIR))
-ELF    := $(TARGET).elf
-BIN    := $(TARGET).bin
-SRC    := main.c
+# ---------- Console configuration ----------
+PS4_HOST ?= ps4
+PS4_PORT ?= 9020
 
+# ---------- Output ----------
+TARGET := HDD-EAPDumper
+ELF_PS4 := $(TARGET).elf
+BIN_PS4 := $(TARGET).bin
+RAW_BIN_PS4 := $(TARGET)-raw.bin
+
+# ---------- Sources ----------
+SRC := main.c
+
+# ---------- Compilation flags ----------
 CFLAGS += -std=c11 -Wall -Wextra -O2
 
-.PHONY: all clean raw
+# ---------- Main targets ----------
+.PHONY: all ps4 raw clean test-ps4
 
-all: $(ELF)
+all: ps4
 
-$(ELF): $(SRC)
+ps4: $(ELF_PS4) $(BIN_PS4)
+
+$(ELF_PS4): $(SRC)
 	$(CC) $(CFLAGS) -o $@ $<
 
-raw: $(BIN)
+$(BIN_PS4): $(ELF_PS4)
+	cp $< $@
+	$(STRIP) $@
 
-$(BIN): $(ELF)
+raw: $(RAW_BIN_PS4)
+
+$(RAW_BIN_PS4): $(ELF_PS4)
 	$(OBJCOPY) -O binary $< $@
 
 clean:
-	rm -f $(ELF) $(BIN)
+	rm -f $(ELF_PS4) $(BIN_PS4) $(RAW_BIN_PS4)
+
+# ---------- Deploy & Test ----------
+test-ps4: $(ELF_PS4)
+	$(PS4_DEPLOY) -h $(PS4_HOST) -p $(PS4_PORT) $^

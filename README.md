@@ -38,4 +38,18 @@ a public `kern_off_eap_hdd_key` value is available.
 LLVM_CONFIG=/path/to/llvm-config make
 ```
 
-The build output is `HDD-EAPDumper.elf`.
+This builds:
+
+- `HDD-EAPDumper.elf`
+- `HDD-EAPDumper.bin`
+
+The `.bin` is the stripped release payload and keeps the ELF payload format
+expected by GoldHEN payloader.
+
+To also generate the optional raw BIN:
+
+```sh
+LLVM_CONFIG=/path/to/llvm-config make raw
+```
+
+This also adds `HDD-EAPDumper-raw.bin`.
