@@ -1,4 +1,4 @@
-# HDD-EAPDumper
+#  EAPDumper
 [![Github All Releases](https://img.shields.io/github/downloads/seregonwar/EAPDumper/total.svg)]()
 [![Repository views](https://hits.sh/github.com/seregonwar/EAPDumper.svg?label=views)](https://hits.sh/github.com/seregonwar/EAPDumper/)
 
@@ -45,8 +45,8 @@ LLVM_CONFIG=/path/to/llvm-config make
 
 This builds:
 
-- `HDD-EAPDumper.elf`
-- `HDD-EAPDumper.bin`
+- `EAPDumper.elf`
+- `EAPDumper.bin`
 
 The `.bin` is the stripped release payload and keeps the ELF payload format
 expected by GoldHEN payloader.
@@ -57,5 +57,5 @@ To also generate the optional raw BIN:
 LLVM_CONFIG=/path/to/llvm-config make raw
 ```
 
-This also adds `HDD-EAPDumper-raw.bin`.
+This also adds `EAPDumper-raw.bin`.
 
