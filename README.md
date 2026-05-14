@@ -34,6 +34,9 @@ USB output is best-effort. The internal `/data/hddeap` backup is mandatory.
 Firmware 12.50, 12.52, 13.00, 13.02, 13.04 and 13.50 are not listed until
 a public `kern_off_eap_hdd_key` value is available.
 
+## Please note 
+Make sure you have a recent version of GoldHEN; I recommend GoldHEN v2.4b18.8 or later
+
 ## Build
 
 ```sh
@@ -55,3 +58,4 @@ LLVM_CONFIG=/path/to/llvm-config make raw
 ```
 
 This also adds `HDD-EAPDumper-raw.bin`.
+
