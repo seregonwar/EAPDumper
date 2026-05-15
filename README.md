@@ -47,15 +47,15 @@ This builds:
 
 - `EAPDumper.elf`
 - `EAPDumper.bin`
+- `EAP-Scanner.elf`
+- `EAP-Scanner.bin`
+
+To build only the scanner payload:
+
+```sh
+LLVM_CONFIG=/path/to/llvm-config make scanner
+```
 
 The `.bin` is the stripped release payload and keeps the ELF payload format
 expected by GoldHEN payloader.
-
-To also generate the optional raw BIN:
-
-```sh
-LLVM_CONFIG=/path/to/llvm-config make raw
-```
-
-This also adds `EAPDumper-raw.bin`.
 

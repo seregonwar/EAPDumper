@@ -1,6 +1,6 @@
 # Copyright (C) 2026
 #
-# HDD-EAPDumper - Makefile
+# EAPDumper - Makefile
 #
 # Compile for PS4 (default):
 #   make
@@ -48,38 +48,47 @@ PS4_HOST ?= ps4
 PS4_PORT ?= 9020
 
 # ---------- Output ----------
-TARGET := HDD-EAPDumper
+TARGET := EAPDumper
+SCANNER_TARGET := EAP-Scanner
 ELF_PS4 := $(TARGET).elf
 BIN_PS4 := $(TARGET).bin
-RAW_BIN_PS4 := $(TARGET)-raw.bin
+
+ELF_SCANNER := $(SCANNER_TARGET).elf
+BIN_SCANNER := $(SCANNER_TARGET).bin
 
 # ---------- Sources ----------
-SRC := main.c
+SRC_PS4 := main.c
+SRC_SCANNER := eap_scanner.c
 
 # ---------- Compilation flags ----------
 CFLAGS += -std=c11 -Wall -Wextra -O2
 
 # ---------- Main targets ----------
-.PHONY: all ps4 raw clean test-ps4
+.PHONY: all ps4 scanner clean test-ps4
 
 all: ps4
+all: scanner
 
 ps4: $(ELF_PS4) $(BIN_PS4)
 
-$(ELF_PS4): $(SRC)
+scanner: $(ELF_SCANNER) $(BIN_SCANNER)
+
+$(ELF_PS4): $(SRC_PS4)
 	$(CC) $(CFLAGS) -o $@ $<
 
 $(BIN_PS4): $(ELF_PS4)
 	cp $< $@
 	$(STRIP) $@
 
-raw: $(RAW_BIN_PS4)
+$(ELF_SCANNER): $(SRC_SCANNER)
+	$(CC) $(CFLAGS) -o $@ $<
 
-$(RAW_BIN_PS4): $(ELF_PS4)
-	$(OBJCOPY) -O binary $< $@
+$(BIN_SCANNER): $(ELF_SCANNER)
+	cp $< $@
+	$(STRIP) $@
 
 clean:
-	rm -f $(ELF_PS4) $(BIN_PS4) $(RAW_BIN_PS4)
+	rm -f $(ELF_PS4) $(BIN_PS4) $(ELF_SCANNER) $(BIN_SCANNER) HDD-EAPDumper.elf HDD-EAPDumper.bin
 
 # ---------- Deploy & Test ----------
 test-ps4: $(ELF_PS4)

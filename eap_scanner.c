@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 /*
- * PS4 HDD EAP Key Dumper
+ * EAP HDD key dumper with blind offset discovery for PS4.
  *
  * For known firmware versions, the EAP key offset is looked up from a
  * built-in table.  For unknown firmware versions, a blind entropy-based

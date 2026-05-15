@@ -4,3 +4,5 @@ build/
 *.o
 /ps4-payload-sdk
 *.elf
+*.txt
+/.commandcode
